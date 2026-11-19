@@ -18,23 +18,26 @@ for the regression coefficients), and tests it both on simulated data and on a r
 hourly temperature changes at New York City airports.
 
 The full theoretical derivation and the complete set of results are in the project report:
-[`Bayesian_report.pdf`](Bayesian_report.pdf). This README covers implementation details that
+[`Generalized_Hyperbolic_Secant_Report.pdf`](Generalized_Hyperbolic_Secant_Report.pdf). This README covers implementation details that
 complement the report rather than repeating it — see below.
 
 ## Repository structure
 
-All files sit in the repository root (no subfolders):
+The repository is organized as follows:
 
 ```
 .
-├── ghs_mala.R                # MalaWG(): Metropolis-within-Gibbs sampler, MALA step for
-│                              # beta + Metropolis-Hastings step for r
-├── ghs_sampler.R              # f_GHS(): GHS density; rghs(): exact sampler (Ratio-of-Uniforms)
-├── simulated_data_analysis.R  # fits the model on simulated data with known beta and r,
-│                              # to check that the sampler recovers the true parameters
-├── temperature_analysis.R     # fits the model on the NYC airports temperature dataset,
-│                              # with full diagnostics and a comparison against a Bayesian LM
-└── Bayesian_report.pdf
+├── Code/
+│   ├── ghs_mala.R                # MalaWG(): Metropolis-within-Gibbs sampler, MALA step for
+│   │                              # beta + Metropolis-Hastings step for r
+│   ├── ghs_sampler.R              # f_GHS(): GHS density; rghs(): exact sampler (Ratio-of-Uniforms)
+│   ├── simulated_data_analysis.R  # fits the model on simulated data with known beta and r,
+│   │                              # to check that the sampler recovers the true parameters
+│   └── temperature_analysis.R     # fits the model on the NYC airports temperature dataset,
+│                                  # with full diagnostics and a comparison against a Bayesian LM
+├── Generalized_Hyperbolic_Secant_Report.pdf
+├── Introductory_Presentation.pdf
+└── README.md
 ```
 
 `temperature_analysis.R` and `simulated_data_analysis.R` both `source()` the two library files, so
@@ -55,6 +58,7 @@ install.packages(c("pracma", "progress", "coda", "ggplot2", "patchwork", "nycfli
 ## How to run
 
 ```r
+setwd("Code")
 source("simulated_data_analysis.R")  # a few minutes, n = 2000
 source("temperature_analysis.R")     # around 11 mins on Colab, n ≈ 26,000
 ```
@@ -74,10 +78,9 @@ A few choices in the code that go beyond what's in the report:
   points. When updating beta with r held fixed, that term (and the rest of the normalizing
   constant) doesn't depend on beta and therefore it can be dropped from `log_lik()`.
   `gammaz()` is only evaluated in the Metropolis-Hastings step for r, where it can't be avoided.
-  
+
 - **Beta is sampled in a whitened parametrization.** The report's formula for the MALA proposal
   (Sec. 3.2/4.2) is written directly on beta. The code instead samples a standard multivariate Gaussian z and maps it into beta via `beta = mu_prior + L %*% z`, where L is the Cholesky factor of the prior covariance matrix. This way, the prior gradient in z-space collapses to -z, so the inverse prior covariance matrix — needed to evaluate the prior gradient directly on beta — never has to be formed at all. Only L is computed, once, outside the MCMC loop, and reused at every iteration to map z into beta.
-
 
 ## Key results
 
