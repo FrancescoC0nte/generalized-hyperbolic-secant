@@ -18,8 +18,11 @@ for the regression coefficients), and tests it both on simulated data and on a r
 hourly temperature changes at New York City airports.
 
 The full theoretical derivation and the complete set of results are in the project report:
-[`Generalized_Hyperbolic_Secant_Report.pdf`](Generalized_Hyperbolic_Secant_Report.pdf). This README covers implementation details that
-complement the report rather than repeating it — see below.
+[`Generalized_Hyperbolic_Secant_Report.pdf`](Generalized_Hyperbolic_Secant_Report.pdf). 
+
+An introductory presentation is also included, [`Introductory_Presentation.pdf`](Introductory_Presentation.pdf), presenting the initial steps of the project and the preliminary development of the model and its implementation.
+
+This README covers implementation details that complement the report rather than repeating it — see below.
 
 ## Repository structure
 
